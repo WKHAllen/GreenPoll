@@ -1,0 +1,88 @@
+<h1>Edit Poll</h1>
+<p *ngIf="initError" class="init-error error-text">
+  Error: <code>{{ initError }}</code>
+</p>
+<div *ngIf="!initError">
+  <div *ngIf="!determinedEditStatus && !pollInfo" class="fetching-poll-info">
+    Fetching poll info...
+  </div>
+  <div
+    *ngIf="determinedEditStatus && (!loggedIn || !canEdit)"
+    class="no-permission"
+  >
+    You do not have permission to edit this poll.
+  </div>
+  <div *ngIf="loggedIn && canEdit">
+    <div *ngIf="pollInfo">
+      <form
+        #editPollForm="ngForm"
+        (ngSubmit)="onEditPollSubmit(editPollForm.value)"
+      >
+        <div class="form-group">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            maxlength="255"
+            required
+            [(ngModel)]="poll.title"
+          />
+        </div>
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            class="form-control"
+            rows="4"
+            id="description"
+            name="description"
+            maxlength="1023"
+            required
+            [(ngModel)]="poll.description"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="poll-options" class="form-label"
+            >Poll options
+            <small class="label-subtext">(up to {{ maxOptions }})</small></label
+          >
+          <div id="poll-options">
+            <div *ngFor="let optionNum of optionNums" class="mb-2">
+              <input
+                *ngIf="pollOptions[optionNum - 1]"
+                type="text"
+                class="form-control poll-option-input"
+                id="pollOption{{ optionNum }}"
+                name="pollOption{{ optionNum }}"
+                maxlength="255"
+                [(ngModel)]="pollOptions[optionNum - 1].value"
+              />
+              <input
+                *ngIf="!pollOptions[optionNum - 1]"
+                type="text"
+                class="form-control poll-option-input"
+                id="pollOption{{ optionNum }}"
+                name="pollOption{{ optionNum }}"
+                maxlength="255"
+                ngModel
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="btn button-primary mt-1 mb-2"
+          [disabled]="submittingForm"
+        >
+          Edit Poll
+        </button>
+        <div class="mb-2">
+          <div *ngFor="let error of errors">
+            <small class="error-text">{{ error }}</small>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

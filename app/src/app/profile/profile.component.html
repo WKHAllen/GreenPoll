@@ -1,0 +1,151 @@
+<h1>Profile</h1>
+<p *ngIf="userInfoError" class="user-info-error error-text">
+  Error: <code>{{ userInfoError }}</code>
+</p>
+<ul *ngIf="gotUserInfo" class="user-info">
+  <li>{{ userInfo.username }}</li>
+  <li>{{ userInfo.email }}</li>
+  <li>{{ userInfo.join_time | date }}</li>
+</ul>
+<p *ngIf="!gotUserInfo && !userInfoError" class="fetching-user-info">
+  Fetching user info...
+</p>
+<div class="profile-form-group">
+  <h3>Change your username</h3>
+  <form
+    #setUsernameForm="ngForm"
+    (ngSubmit)="onSetUsernameSubmit(setUsernameForm.value)"
+  >
+    <div class="form-group">
+      <label for="username" class="form-label">New username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        maxlength="63"
+        required
+        [(ngModel)]="newUsername"
+      />
+    </div>
+    <button
+      type="submit"
+      class="btn button-primary mt-1 mb-2"
+      [disabled]="submittingUsernameForm"
+    >
+      Change username
+    </button>
+    <small
+      class="success-message success-text"
+      [ngClass]="{ 'success-show': showUsernameSuccess === true }"
+      >Success</small
+    >
+    <div class="mb-2">
+      <small *ngIf="setUsernameError" class="error-text">
+        {{ setUsernameError }}
+      </small>
+    </div>
+  </form>
+</div>
+<div class="profile-form-group">
+  <h3>Change your password</h3>
+  <form
+    #setPasswordForm="ngForm"
+    (ngSubmit)="onSetPasswordSubmit(setPasswordForm.value)"
+  >
+    <div class="form-group">
+      <label for="password" class="form-label">New password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        maxlength="255"
+        required
+        ngModel
+      />
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword" class="form-label"
+        >Confirm new password</label
+      >
+      <input
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        name="confirmPassword"
+        maxlength="255"
+        required
+        ngModel
+      />
+    </div>
+    <button
+      type="submit"
+      class="btn button-primary mt-1 mb-2"
+      [disabled]="submittingPasswordForm"
+    >
+      Change password
+    </button>
+    <small
+      class="success-message success-text"
+      [ngClass]="{ 'success-show': showPasswordSuccess === true }"
+      >Success</small
+    >
+    <div class="mb-2">
+      <small *ngIf="setPasswordError" class="error-text">
+        {{ setPasswordError }}
+      </small>
+    </div>
+  </form>
+</div>
+<div class="profile-form-group">
+  <h3>Log out everywhere</h3>
+  <p class="logout-everywhere-info">
+    This will log you out of your account everywhere, on all devices.
+  </p>
+  <button
+    type="button"
+    class="btn button-primary mt-1 mb-2"
+    (click)="logoutEverywhere()"
+    [disabled]="logoutEverywhereClicked"
+  >
+    Log out everywhere
+  </button>
+  <div class="mb-2">
+    <small *ngIf="logoutEverywhereError" class="error-text">
+      {{ logoutEverywhereError }}
+    </small>
+  </div>
+</div>
+<div>
+  <h3>Your Polls</h3>
+  <p *ngIf="!gotUserPolls" class="fetching-user-polls">
+    Fetching your polls...
+  </p>
+  <div *ngIf="gotUserPolls">
+    <small *ngIf="userPollsError" class="error-text">
+      {{ userPollsError }}
+    </small>
+    <p *ngIf="!userPollsError && userPolls.length === 0" class="no-polls-info">
+      You have not yet created any polls.
+    </p>
+    <div *ngIf="!userPollsError && userPolls.length > 0" class="row mt-1 mb-2">
+      <div *ngFor="let poll of userPolls" class="col-12 col-sm-4">
+        <div class="poll-card-container">
+          <a routerLink="/poll/{{ poll.id }}">
+            <div class="card poll-card">
+              <div class="card-body">
+                <h5 class="card-title">{{ poll.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  {{ poll.create_time | date }}
+                </h6>
+                <p class="card-text">{{ poll.description }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a routerLink="/new" class="btn button-primary mt-1">New poll</a>
+</div>

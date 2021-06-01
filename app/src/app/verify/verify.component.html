@@ -1,0 +1,22 @@
+<h1>Verify Account</h1>
+<div *ngIf="!verifySuccess && !error" class="verifying">
+  One moment, we're verifying your account...
+</div>
+<div *ngIf="verifySuccess" class="verify-success">
+  Success! Your account has been verified and activated. You may now proceed to
+  <a routerLink="/login">the login page</a> and begin making polls.
+</div>
+<div *ngIf="error">
+  <p class="verify-error-msg error-text">
+    Error: <code>{{ error }}</code>
+  </p>
+  <p class="verify-error">
+    This may have occurred because your link expired or because you have already
+    verified your account. Please
+    <a routerLink="/register">try registering again</a>, bearing in mind you
+    have one hour to verify your account. If this problem persists, please
+    <a href="https://github.com/WKHAllen/GreenPoll/issues/new" target="_blank"
+      >create an issue for it on GitHub</a
+    >.
+  </p>
+</div>

@@ -1,0 +1,40 @@
+@use '../../styles';
+
+.header {
+  padding: 16px;
+  background-color: styles.$primary-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  * {
+    color: styles.$primary-as-bg-text-color;
+  }
+
+  a {
+    img {
+      vertical-align: middle;
+    }
+
+    h5 {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+      margin: 0;
+      padding-left: 12px;
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+  }
+}
+
+.nav-links {
+  margin: 0;
+  list-style: none;
+  font-size: 12pt;
+
+  li {
+    display: inline-block;
+    padding: 0 12px;
+  }
+}

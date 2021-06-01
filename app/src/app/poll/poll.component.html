@@ -1,0 +1,91 @@
+<h1>{{ poll.title || "Poll" }}</h1>
+<p class="poll-description">{{ poll.description }}</p>
+<p *ngIf="error" class="poll-error error-text">
+  Error: <code>{{ error }}</code>
+</p>
+<div *ngIf="!error && !pollInfo" class="fetching-poll-info">
+  Fetching poll info...
+</div>
+<div *ngIf="!error && pollInfo">
+  <button
+    type="button"
+    class="btn button-primary mb-3"
+    (click)="copyPollLink()"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    title="Click to copy poll URL"
+  >
+    Share
+  </button>
+  <a
+    *ngIf="canEdit"
+    routerLink="/edit/{{ poll.id }}"
+    class="btn button-secondary mb-3 ms-2"
+  >
+    Edit poll
+  </a>
+  <h3>Options</h3>
+  <form #voteForm="ngForm" (ngSubmit)="onVoteSubmit()">
+    <div *ngFor="let option of pollOptions" class="form-check">
+      <input
+        type="radio"
+        class="form-check-input"
+        id="option-{{ option.id }}"
+        name="vote-option"
+        [checked]="selectedOption === option.id"
+        (click)="select($event)"
+        [disabled]="!loggedIn"
+      />
+      <label class="form-check-label" for="option-{{ option.id }}">{{
+        option.value
+      }}</label>
+    </div>
+    <div *ngIf="loggedIn">
+      <button type="submit" class="btn button-primary mt-2 mb-3">
+        Cast vote
+      </button>
+      <button
+        type="button"
+        class="btn button-secondary mt-2 mb-3 ms-2 unvote-button"
+        (click)="onUnvote()"
+        [disabled]="selectedOption === 0"
+      >
+        Remove vote
+      </button>
+    </div>
+    <div *ngIf="!loggedIn" class="mt-2 mb-3">
+      <small> You must be logged in to vote. </small>
+    </div>
+  </form>
+  <div *ngIf="pollVotes.length > 0" class="pie-chart">
+    <h3>Votes</h3>
+    <canvas
+      baseChart
+      [data]="pieChartData"
+      [labels]="pieChartLabels"
+      [chartType]="pieChartType"
+      [options]="pieChartOptions"
+      [plugins]="pieChartPlugins"
+      [legend]="pieChartLegend"
+      [colors]="pieChartColors"
+    >
+    </canvas>
+    <h3>Voters</h3>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">User</th>
+          <th scope="col">Option</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vote of pollUserVotes">
+          <td>{{ vote.username }}</td>
+          <td>{{ vote.poll_option_value }}</td>
+          <td>{{ vote.vote_time | date: "medium" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
