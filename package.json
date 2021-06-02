@@ -1,0 +1,23 @@
+{
+  "name": "greenpoll",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd app && npm run build && cd .. && cd src && npm run build",
+    "build-frontend": "cd app && npm run build",
+    "build-backend": "cd src && npm run build",
+    "start": "cd src && npm start",
+    "postinstall": "cd app && npm install && cd .. && cd src && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WKHAllen/GreenPoll.git"
+  },
+  "author": "Will Allen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WKHAllen/GreenPoll/issues"
+  },
+  "homepage": "https://github.com/WKHAllen/GreenPoll#readme"
+}

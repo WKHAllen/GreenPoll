@@ -1,4 +1,4 @@
-export const APIURL = 'https://greenpoll-api.herokuapp.com';
+export const APIURL = '/api';
 
 export interface GenericResponse {
   success?: boolean;
