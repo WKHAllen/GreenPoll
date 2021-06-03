@@ -105,6 +105,7 @@ export class UserService extends BaseService {
    */
   public async getUser(userID: number): Promise<User> {
     const res = await this.dbm.executeFile<User>("user/get_user.sql", [userID]);
+
     if (res.length === 1) {
       return res[0];
     } else {
@@ -123,6 +124,7 @@ export class UserService extends BaseService {
       "user/get_user_by_username.sql",
       [username]
     );
+
     if (res.length === 1) {
       return res[0];
     } else {
@@ -140,6 +142,7 @@ export class UserService extends BaseService {
     const res = await this.dbm.executeFile<User>("user/get_user_by_email.sql", [
       email,
     ]);
+
     if (res.length === 1) {
       return res[0];
     } else {
