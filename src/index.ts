@@ -1,5 +1,7 @@
 import * as express from "express";
 import * as enforce from "express-sslify";
+import DatabaseManager from "./services";
+import initDB from "./dbinit";
 import * as path from "path";
 
 /**
@@ -49,12 +51,23 @@ app.use(
     res: express.Response,
     next: express.NextFunction
   ) => {
+    console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
 );
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
+// Create the database manager
+const dbm = new DatabaseManager(dbURL, 20, "sql");
+
+// Initialize the database
+initDB(dbm).then(() => {
+  // Put the database manager in the app object
+  app.set("dbm", dbm);
+
+  // Listen for connections
+  app.listen(port, () => {
+    console.log(`App running on port ${port}`);
+  });
 });
 
 // Export the express app
