@@ -218,8 +218,21 @@ export class UserService extends BaseService {
     await this.dbm.executeFile("user/set_verified.sql", [verified, userID]);
   }
 
+  /**
+   * Returns all polls created by a user.
+   *
+   * @param userID The ID of the user.
+   * @returns The polls created by the user.
+   */
   // TODO: public async getUserPolls(userID: number): Promise<Poll[]> {}
 
+  /**
+   * Logs a user in and returns the new session.
+   *
+   * @param email The user's email address.
+   * @param password The user's password.
+   * @returns The new user session.
+   */
   // TODO: public async login(email: string, password: string): Promise<Session> {}
 
   /**
