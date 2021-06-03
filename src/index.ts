@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as enforce from "express-sslify";
+// TODO: import * as routes from "./routes";
 import DatabaseManager from "./services";
 import initDB from "./dbinit";
 import * as path from "path";
@@ -38,6 +39,8 @@ if (!debug) {
 
 // Include static directory for css and js files
 app.use(express.static(path.join(__dirname + "/../../app/dist/greenpoll")));
+
+// TODO: Use routes
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirname + "/../../app/dist/greenpoll/index.html"));

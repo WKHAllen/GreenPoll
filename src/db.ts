@@ -3,11 +3,15 @@
  * @packageDocumentation
  */
 
-import { Pool, PoolClient } from "pg";
+import { Pool, types } from "pg";
 import * as fs from "fs";
 import * as path from "path";
 
+// Log database service errors
 const logErrors = true;
+
+// Parse timestamps
+types.setTypeParser(1114, (timestamp) => Date.parse(timestamp));
 
 /**
  * If an error is thrown, provide information on the error.
@@ -72,9 +76,9 @@ export class DB {
     const conn = await this.pool.connect();
 
     try {
-      const res = (await conn.query(stmt, params)).rows;
+      const res = await conn.query(stmt, params);
       conn.release();
-      return res;
+      return res.rows;
     } catch (err) {
       if (logErrors) {
         logError(stmt, params, undefined, err);
@@ -100,8 +104,8 @@ export class DB {
 
     for (let i = 0; i < stmts.length; i++) {
       try {
-        const results = (await conn.query(stmts[i], params[i] || [])).rows;
-        res.push(results);
+        const results = await conn.query(stmts[i], params[i] || []);
+        res.push(results.rows);
       } catch (err) {
         if (logErrors) {
           logError(stmts[i], params[i], undefined, err);
@@ -128,8 +132,8 @@ export class DB {
   ): Promise<T[]> {
     sqlPath = sqlPath || this.sqlPath;
     const filepath = sqlPath ? path.join(sqlPath, filename) : filename;
-    const sql = (await fs.promises.readFile(filepath)).toString();
-    const res = await this.execute<T>(sql, params);
+    const sql = await fs.promises.readFile(filepath);
+    const res = await this.execute<T>(sql.toString(), params);
     return res;
   }
 
@@ -152,8 +156,8 @@ export class DB {
       const filepath = sqlPath
         ? path.join(sqlPath, filenames[i])
         : filenames[i];
-      const sql = (await fs.promises.readFile(filepath)).toString();
-      const results = await this.execute<T>(sql, params[i] || []);
+      const sql = await fs.promises.readFile(filepath);
+      const results = await this.execute<T>(sql.toString(), params[i] || []);
       res.push(results);
     }
 
