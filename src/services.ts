@@ -8,6 +8,7 @@ import { DB } from "./db";
 import { UserService } from "./services/user";
 import { PollService } from "./services/poll";
 import { PollOptionService } from "./services/pollOption";
+import { PollVoteService } from "./services/pollVote";
 import { VerifyService } from "./services/verify";
 
 export default class DatabaseManager {
@@ -15,6 +16,7 @@ export default class DatabaseManager {
   readonly userService: UserService;
   readonly pollService: PollService;
   readonly pollOptionService: PollOptionService;
+  readonly pollVoteService: PollVoteService;
   readonly verifyService: VerifyService;
 
   constructor(dbURL: string, max: number = 20, sqlPath: string = null) {
@@ -22,6 +24,7 @@ export default class DatabaseManager {
     this.userService = new UserService(this);
     this.pollService = new PollService(this);
     this.pollOptionService = new PollOptionService(this);
+    this.pollVoteService = new PollVoteService(this);
     this.verifyService = new VerifyService(this);
   }
 
