@@ -4,6 +4,7 @@
  */
 
 import { BaseService, hashPassword } from "./util";
+import { Poll } from "./poll";
 
 /**
  * User architecture.
@@ -224,7 +225,12 @@ export class UserService extends BaseService {
    * @param userID The ID of the user.
    * @returns The polls created by the user.
    */
-  // TODO: public async getUserPolls(userID: number): Promise<Poll[]> {}
+  public async getUserPolls(userID: number): Promise<Poll[]> {
+    const polls = await this.dbm.executeFile<Poll>("user/get_user_polls.sql", [
+      userID,
+    ]);
+    return polls;
+  }
 
   /**
    * Logs a user in and returns the new session.

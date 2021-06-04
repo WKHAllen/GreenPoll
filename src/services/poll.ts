@@ -4,6 +4,7 @@
  */
 
 import { BaseService } from "./util";
+import { PollOption } from "./pollOption";
 
 /**
  * Poll architecture.
@@ -91,7 +92,13 @@ export class PollService extends BaseService {
    * @param pollID The ID of the poll.
    * @returns The options associated with the poll.
    */
-  // TODO: public async getPollOptions(pollID: number): Promise<PollOption[]> {}
+  public async getPollOptions(pollID: number): Promise<PollOption[]> {
+    const res = await this.dbm.executeFile<PollOption>(
+      "poll/get_poll_options.sql",
+      [pollID]
+    );
+    return res;
+  }
 
   /**
    * Returns all votes associated with a poll.
