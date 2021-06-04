@@ -11,6 +11,7 @@ import { PollOptionService } from "./services/pollOption";
 import { PollVoteService } from "./services/pollVote";
 import { SessionService } from "./services/session";
 import { VerifyService } from "./services/verify";
+import { PasswordResetService } from "./services/passwordReset";
 
 export default class DatabaseManager {
   readonly db: DB;
@@ -20,6 +21,7 @@ export default class DatabaseManager {
   readonly pollVoteService: PollVoteService;
   readonly sessionService: SessionService;
   readonly verifyService: VerifyService;
+  readonly passwordResetService: PasswordResetService;
 
   constructor(dbURL: string, max: number = 20, sqlPath: string = null) {
     this.db = new DB(dbURL, max, sqlPath);
@@ -29,6 +31,7 @@ export default class DatabaseManager {
     this.pollVoteService = new PollVoteService(this);
     this.sessionService = new SessionService(this);
     this.verifyService = new VerifyService(this);
+    this.passwordResetService = new PasswordResetService(this);
   }
 
   public async executeFile<T = void>(
