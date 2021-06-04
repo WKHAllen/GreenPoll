@@ -1,5 +1,5 @@
 /**
- * Services for poll option functions.
+ * Services for the poll option table.
  * @packageDocumentation
  */
 
@@ -7,7 +7,7 @@ import { BaseService } from "./util";
 import { Poll } from "./poll";
 
 /**
- * The maximum number of options per poll
+ * The maximum number of options per poll.
  */
 const NUM_POLL_OPTIONS: number = 5;
 
@@ -21,7 +21,7 @@ export interface PollOption {
 }
 
 /**
- * Poll option services
+ * Poll option services.
  */
 export class PollOptionService extends BaseService {
   /**

@@ -1,10 +1,11 @@
 /**
- * Services for user functions.
+ * Services for the user table.
  * @packageDocumentation
  */
 
-import { BaseService, hashPassword } from "./util";
+import { BaseService, hashPassword, checkPassword } from "./util";
 import { Poll } from "./poll";
+import { Session } from "./session";
 
 /**
  * User architecture.
@@ -19,7 +20,7 @@ export interface User {
 }
 
 /**
- * User services
+ * User services.
  */
 export class UserService extends BaseService {
   /**
@@ -239,7 +240,24 @@ export class UserService extends BaseService {
    * @param password The user's password.
    * @returns The new user session.
    */
-  // TODO: public async login(email: string, password: string): Promise<Session> {}
+  public async login(email: string, password: string): Promise<Session> {
+    const userExists = await this.userExistsForEmail(email);
+
+    if (userExists) {
+      const user = await this.getUserByEmail(email);
+
+      const passwordMatch = await checkPassword(password, user.password);
+
+      if (passwordMatch) {
+        const session = await this.dbm.sessionService.createSession(user.id);
+        return session;
+      } else {
+        throw new Error("Invalid login");
+      }
+    } else {
+      throw new Error("Invalid login");
+    }
+  }
 
   /**
    * Deletes a user.

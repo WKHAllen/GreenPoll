@@ -1,5 +1,5 @@
 /**
- * Services for poll functions.
+ * Services for the poll table.
  * @packageDocumentation
  */
 
@@ -30,7 +30,7 @@ export interface PollVoter {
 }
 
 /**
- * Poll services
+ * Poll services.
  */
 export class PollService extends BaseService {
   /**

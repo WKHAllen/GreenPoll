@@ -1,5 +1,5 @@
 /**
- * Services for verify functions.
+ * Services for the verify table.
  * @packageDocumentation
  */
 
@@ -16,7 +16,7 @@ export interface Verify {
 }
 
 /**
- * Verify services
+ * Verify services.
  */
 export class VerifyService extends BaseService {
   /**
