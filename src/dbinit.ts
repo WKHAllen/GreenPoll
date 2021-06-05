@@ -4,6 +4,7 @@
  */
 
 import DatabaseManager from "./services";
+import { pruneVerifyRecords, prunePasswordResetRecords } from "./services/util";
 
 /**
  * Initialize the database.
@@ -26,6 +27,7 @@ export default async function initDB(
   dbm.db.executeFiles(tables.map((table) => `init/${table}.sql`));
 
   if (prune) {
-    // TODO: Prune records from the database
+    await pruneVerifyRecords(dbm);
+    await prunePasswordResetRecords(dbm);
   }
 }

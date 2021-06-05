@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService } from "./util";
+import { BaseService, pruneVerifyRecord } from "./util";
 import { User } from "./user";
 
 /**
@@ -23,9 +23,13 @@ export class VerifyService extends BaseService {
    * Creates a verification record and returns the resulting record.
    *
    * @param email The email address of the user being verified.
+   * @param prune Whether or not to prune the record when the time comes.
    * @returns The resulting verification record.
    */
-  public async createVerification(email: string): Promise<Verify> {
+  public async createVerification(
+    email: string,
+    prune: boolean = true
+  ): Promise<Verify> {
     const verificationExists = await this.verificationExistsForEmail(email);
 
     if (!verificationExists) {
@@ -33,6 +37,11 @@ export class VerifyService extends BaseService {
         "verify/create_verification.sql",
         [email]
       );
+
+      if (prune) {
+        pruneVerifyRecord(this.dbm, res[0].id);
+      }
+
       return res[0];
     } else {
       const verification = await this.getVerificationForEmail(email);
@@ -107,6 +116,18 @@ export class VerifyService extends BaseService {
   }
 
   /**
+   * Returns all verification records.
+   *
+   * @returns All verification records.
+   */
+  public async getVerifications(): Promise<Verify[]> {
+    const res = await this.dbm.executeFile<Verify>(
+      "verify/get_verifications.sql"
+    );
+    return res;
+  }
+
+  /**
    * Returns the user who created the verification record.
    *
    * @param verifyID The ID of the verification record.
@@ -132,6 +153,32 @@ export class VerifyService extends BaseService {
    */
   public async deleteVerification(verifyID: string): Promise<void> {
     await this.dbm.executeFile("verify/delete_verification.sql", [verifyID]);
+  }
+
+  /**
+   * Delete a verification record and the corresponding user.
+   *
+   * @param verifyID A verification record's ID.
+   */
+  public async deleteUnverifiedUser(verifyID: string): Promise<void> {
+    const valid = await this.verificationExists(verifyID);
+
+    if (valid) {
+      const verification = await this.getVerification(verifyID);
+      const userExists = await this.dbm.userService.userExistsForEmail(
+        verification.email
+      );
+
+      if (userExists) {
+        const user = await this.getUserByVerification(verifyID);
+
+        if (!user.verified) {
+          await this.dbm.userService.deleteUser(user.id);
+        }
+      }
+
+      await this.deleteVerification(verifyID);
+    }
   }
 
   /**

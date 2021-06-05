@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService } from "./util";
+import { BaseService, prunePasswordResetRecord } from "./util";
 import { User } from "./user";
 
 /**
@@ -25,7 +25,10 @@ export class PasswordResetService extends BaseService {
    * @param email The email address of the user requesting the password reset.
    * @returns The password reset record.
    */
-  public async createPasswordReset(email: string): Promise<PasswordReset> {
+  public async createPasswordReset(
+    email: string,
+    prune: boolean = true
+  ): Promise<PasswordReset> {
     const passwordResetExists = await this.passwordResetExists(email);
 
     if (!passwordResetExists) {
@@ -33,6 +36,11 @@ export class PasswordResetService extends BaseService {
         "password_reset/create_password_reset.sql",
         [email]
       );
+
+      if (prune) {
+        prunePasswordResetRecord(this.dbm, res[0].id);
+      }
+
       return res[0];
     } else {
       const passwordReset = await this.getPasswordResetForEmail(email);
@@ -106,6 +114,18 @@ export class PasswordResetService extends BaseService {
     } else {
       throw new Error("Password reset record does not exist for given email");
     }
+  }
+
+  /**
+   * Returns all password reset records.
+   *
+   * @returns All password reset records.
+   */
+  public async getPasswordResets(): Promise<PasswordReset[]> {
+    const res = await this.dbm.executeFile<PasswordReset>(
+      "password_reset/get_password_resets.sql"
+    );
+    return res;
   }
 
   /**
