@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as enforce from "express-sslify";
-// TODO: import * as routes from "./routes";
+import * as cookieParser from "cookie-parser";
+import * as routes from "./routes";
 import DatabaseManager from "./services";
 import initDB from "./dbinit";
 import * as path from "path";
@@ -37,10 +38,14 @@ if (!debug) {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
+// Cookie parsing
+app.use(cookieParser());
+
 // Include static directory for css and js files
 app.use(express.static(path.join(__dirname + "/../../app/dist/greenpoll")));
 
-// TODO: Use routes
+// Use routes
+app.use("/api", routes.userRouter);
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirname + "/../../app/dist/greenpoll/index.html"));

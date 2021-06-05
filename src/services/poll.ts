@@ -15,7 +15,7 @@ export interface Poll {
   user_id: number;
   title: string;
   description: string;
-  crerate_time: number;
+  create_time: number;
 }
 
 /**
