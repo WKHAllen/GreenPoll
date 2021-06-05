@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService } from "./util";
+import { BaseService, ServiceError } from "./util";
 import { Poll } from "./poll";
 
 /**
@@ -38,9 +38,11 @@ export class PollOptionService extends BaseService {
     const numPollOptions = await this.getNumPollOptions(pollID);
 
     if (numPollOptions >= NUM_POLL_OPTIONS) {
-      throw new Error("Maximum number of poll options has been reached");
+      throw new ServiceError("Maximum number of poll options has been reached");
     } else if (value.length < 1 || value.length > 255) {
-      throw new Error("Option text must be between 1 and 255 characters");
+      throw new ServiceError(
+        "Option text must be between 1 and 255 characters"
+      );
     } else {
       const res = await this.dbm.executeFile<PollOption>(
         "poll_option/create_poll_option.sql",
@@ -79,7 +81,7 @@ export class PollOptionService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Poll option does not exist");
+      throw new ServiceError("Poll option does not exist");
     }
   }
 
@@ -108,7 +110,9 @@ export class PollOptionService extends BaseService {
     value: string
   ): Promise<void> {
     if (value.length < 1 || value.length > 255) {
-      throw new Error("Option text must be between 1 and 255 characters");
+      throw new ServiceError(
+        "Option text must be between 1 and 255 characters"
+      );
     } else {
       await this.dbm.executeFile("poll_option/set_poll_option_value.sql", [
         value,

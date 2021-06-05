@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService, pruneVerifyRecord } from "./util";
+import { BaseService, ServiceError, pruneVerifyRecord } from "./util";
 import { User } from "./user";
 
 /**
@@ -92,7 +92,7 @@ export class VerifyService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Verification record does not exist");
+      throw new ServiceError("Verification record does not exist");
     }
   }
 
@@ -111,7 +111,9 @@ export class VerifyService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Verification record does not exist for given email");
+      throw new ServiceError(
+        "Verification record does not exist for given email"
+      );
     }
   }
 
@@ -142,7 +144,7 @@ export class VerifyService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("User does not exist for given verify ID");
+      throw new ServiceError("User does not exist for given verify ID");
     }
   }
 
@@ -194,7 +196,7 @@ export class VerifyService extends BaseService {
       await this.deleteVerification(verifyID);
       await this.dbm.userService.setVerified(user.id);
     } else {
-      throw new Error("Invalid verify ID");
+      throw new ServiceError("Invalid verify ID");
     }
   }
 }

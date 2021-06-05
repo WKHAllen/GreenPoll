@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService } from "./util";
+import { BaseService, ServiceError } from "./util";
 import { PollOption } from "./pollOption";
 import { PollVote } from "./pollVote";
 
@@ -47,9 +47,11 @@ export class PollService extends BaseService {
     description: string
   ): Promise<Poll> {
     if (title.length < 1 || title.length > 255) {
-      throw new Error("Title must be between 1 and 255 characters");
+      throw new ServiceError("Title must be between 1 and 255 characters");
     } else if (description.length > 1023) {
-      throw new Error("Description must be no more than 1023 characters");
+      throw new ServiceError(
+        "Description must be no more than 1023 characters"
+      );
     } else {
       const res = await this.dbm.executeFile<Poll>("poll/create_poll.sql", [
         userID,
@@ -83,7 +85,7 @@ export class PollService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Poll does not exist");
+      throw new ServiceError("Poll does not exist");
     }
   }
 
@@ -137,7 +139,7 @@ export class PollService extends BaseService {
    */
   public async setTitle(pollID: number, title: string): Promise<void> {
     if (title.length < 1 || title.length > 255) {
-      throw new Error("Title must be between 1 and 255 characters");
+      throw new ServiceError("Title must be between 1 and 255 characters");
     } else {
       await this.dbm.executeFile("poll/set_title.sql", [title, pollID]);
     }
@@ -154,7 +156,9 @@ export class PollService extends BaseService {
     description: string
   ): Promise<void> {
     if (description.length > 1023) {
-      throw new Error("Description must be no more than 1023 characters");
+      throw new ServiceError(
+        "Description must be no more than 1023 characters"
+      );
     } else {
       await this.dbm.executeFile("poll/set_description.sql", [
         description,

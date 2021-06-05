@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService } from "./util";
+import { BaseService, ServiceError } from "./util";
 import { User } from "./user";
 
 /**
@@ -68,7 +68,7 @@ export class SessionService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Session does not exist");
+      throw new ServiceError("Session does not exist");
     }
   }
 
@@ -87,7 +87,7 @@ export class SessionService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("User or session does not exist");
+      throw new ServiceError("User or session does not exist");
     }
   }
 

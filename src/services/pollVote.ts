@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService } from "./util";
+import { BaseService, ServiceError } from "./util";
 import { Poll } from "./poll";
 
 /**
@@ -55,7 +55,7 @@ export class PollVoteService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Poll vote does not exist");
+      throw new ServiceError("Poll vote does not exist");
     }
   }
 
@@ -74,7 +74,7 @@ export class PollVoteService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Poll vote does not exist");
+      throw new ServiceError("Poll vote does not exist");
     }
   }
 

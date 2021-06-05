@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService, hashPassword, checkPassword } from "./util";
+import { BaseService, ServiceError, hashPassword, checkPassword } from "./util";
 import { Poll } from "./poll";
 import { Session } from "./session";
 
@@ -40,15 +40,15 @@ export class UserService extends BaseService {
     const emailExists = await this.userExistsForEmail(email);
 
     if (usernameExists) {
-      throw new Error("Username is in use");
+      throw new ServiceError("Username is in use");
     } else if (emailExists) {
-      throw new Error("Email is in use");
+      throw new ServiceError("Email is in use");
     } else if (username.length < 3 || username.length > 63) {
-      throw new Error("Username must be between 3 and 63 characters");
+      throw new ServiceError("Username must be between 3 and 63 characters");
     } else if (email.length < 5 || email.length > 63) {
-      throw new Error("Email must be between 5 and 63 characters");
+      throw new ServiceError("Email must be between 5 and 63 characters");
     } else if (password.length < 8 || password.length > 255) {
-      throw new Error("Password must be between 8 and 255 characters");
+      throw new ServiceError("Password must be between 8 and 255 characters");
     } else {
       const passwordHash = await hashPassword(password);
 
@@ -111,7 +111,7 @@ export class UserService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("User does not exist");
+      throw new ServiceError("User does not exist");
     }
   }
 
@@ -130,7 +130,7 @@ export class UserService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("User does not exist");
+      throw new ServiceError("User does not exist");
     }
   }
 
@@ -148,7 +148,7 @@ export class UserService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("User does not exist");
+      throw new ServiceError("User does not exist");
     }
   }
 
@@ -162,9 +162,9 @@ export class UserService extends BaseService {
     const usernameExists = await this.userExistsForUsername(username);
 
     if (usernameExists) {
-      throw new Error("Username is in use");
+      throw new ServiceError("Username is in use");
     } else if (username.length < 3 || username.length > 63) {
-      throw new Error("Username must be between 3 and 63 characters");
+      throw new ServiceError("Username must be between 3 and 63 characters");
     } else {
       await this.dbm.executeFile("user/set_username.sql", [username, userID]);
     }
@@ -180,9 +180,9 @@ export class UserService extends BaseService {
     const emailExists = await this.userExistsForEmail(email);
 
     if (emailExists) {
-      throw new Error("Email is in use");
+      throw new ServiceError("Email is in use");
     } else if (email.length < 5 || email.length > 63) {
-      throw new Error("Email must be between 5 and 63 characters");
+      throw new ServiceError("Email must be between 5 and 63 characters");
     } else {
       await this.dbm.executeFile("user/set_email.sql", [email, userID]);
     }
@@ -196,7 +196,7 @@ export class UserService extends BaseService {
    */
   public async setPassword(userID: number, password: string): Promise<void> {
     if (password.length < 5 || password.length > 63) {
-      throw new Error("Password must be between 8 and 255 characters");
+      throw new ServiceError("Password must be between 8 and 255 characters");
     } else {
       const passwordHash = await hashPassword(password);
 
@@ -252,10 +252,10 @@ export class UserService extends BaseService {
         const session = await this.dbm.sessionService.createSession(user.id);
         return session;
       } else {
-        throw new Error("Invalid login");
+        throw new ServiceError("Invalid login");
       }
     } else {
-      throw new Error("Invalid login");
+      throw new ServiceError("Invalid login");
     }
   }
 

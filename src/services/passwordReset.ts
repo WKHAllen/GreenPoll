@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService, prunePasswordResetRecord } from "./util";
+import { BaseService, ServiceError, prunePasswordResetRecord } from "./util";
 import { User } from "./user";
 
 /**
@@ -23,6 +23,7 @@ export class PasswordResetService extends BaseService {
    * Creates a password reset record and returns the resulting record.
    *
    * @param email The email address of the user requesting the password reset.
+   * @param prune Whether or not to prune the record when the time comes.
    * @returns The password reset record.
    */
   public async createPasswordReset(
@@ -93,7 +94,7 @@ export class PasswordResetService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Password reset record does not exist");
+      throw new ServiceError("Password reset record does not exist");
     }
   }
 
@@ -112,7 +113,9 @@ export class PasswordResetService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("Password reset record does not exist for given email");
+      throw new ServiceError(
+        "Password reset record does not exist for given email"
+      );
     }
   }
 
@@ -143,7 +146,7 @@ export class PasswordResetService extends BaseService {
     if (res.length === 1) {
       return res[0];
     } else {
-      throw new Error("User does not exist for given password reset ID");
+      throw new ServiceError("User does not exist for given password reset ID");
     }
   }
 
@@ -175,7 +178,7 @@ export class PasswordResetService extends BaseService {
       await this.deletePasswordReset(passwordResetID);
       await this.dbm.userService.setPassword(user.id, newPassword);
     } else {
-      throw new Error("Invalid password reset ID");
+      throw new ServiceError("Invalid password reset ID");
     }
   }
 }

@@ -42,6 +42,11 @@ export abstract class BaseService {
 }
 
 /**
+ * Custom error type for services.
+ */
+export class ServiceError extends Error {}
+
+/**
  * Hash a password.
  *
  * @param password The password.
