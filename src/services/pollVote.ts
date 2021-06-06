@@ -89,7 +89,12 @@ export class PollVoteService extends BaseService {
       "poll_vote/get_poll_vote_poll.sql",
       [pollVoteID]
     );
-    return res[0];
+
+    if (res.length === 1) {
+      return res[0];
+    } else {
+      throw new ServiceError("Poll vote does not exist");
+    }
   }
 
   /**

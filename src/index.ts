@@ -48,6 +48,7 @@ app.use(express.static(path.join(__dirname + "/../../app/dist/greenpoll")));
 app.use("/api", routes.userRouter);
 app.use("/api", routes.pollRouter);
 app.use("/api", routes.pollOptionRouter);
+app.use("/api", routes.pollVoteRouter);
 app.use("/api", routes.loginRegisterRouter);
 app.use("/api", routes.verificationRouter);
 app.use("/api", routes.passwordResetRouter);
