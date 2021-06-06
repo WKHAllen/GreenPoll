@@ -69,7 +69,7 @@ export class PollService extends BaseService {
    * @returns Whether or not the poll exists.
    */
   public async pollExists(pollID: number): Promise<boolean> {
-    const res = await this.dbm.executeFile<Poll>("poll/get_poll", [pollID]);
+    const res = await this.dbm.executeFile<Poll>("poll/get_poll.sql", [pollID]);
     return res.length === 1;
   }
 
@@ -80,7 +80,7 @@ export class PollService extends BaseService {
    * @returns The poll record.
    */
   public async getPoll(pollID: number): Promise<Poll> {
-    const res = await this.dbm.executeFile<Poll>("poll/get_poll", [pollID]);
+    const res = await this.dbm.executeFile<Poll>("poll/get_poll.sql", [pollID]);
 
     if (res.length === 1) {
       return res[0];

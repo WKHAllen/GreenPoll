@@ -41,7 +41,7 @@ passwordResetRouter.get(
 
     const exists = await dbm.passwordResetService.passwordResetExists(resetID);
 
-    respond(res, { exists });
+    respond(res, exists);
   })
 );
 

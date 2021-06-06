@@ -27,7 +27,7 @@ export interface PollVoteInfo {
   error?: string;
 }
 
-export interface PollUserVoteInfo {
+export interface PollVoterInfo {
   user_id?: number;
   username?: string;
   poll_option_id?: number;
@@ -328,10 +328,10 @@ export class PollService {
     });
   }
 
-  public async getPollUserVotes(pollID: number): Promise<PollUserVoteInfo[]> {
+  public async getPollVoters(pollID: number): Promise<PollVoterInfo[]> {
     return new Promise((resolve, reject) => {
       this.http
-        .get<PollUserVoteInfo[]>(APIURL + '/get_poll_user_votes', {
+        .get<PollVoterInfo[]>(APIURL + '/get_poll_voters', {
           params: { poll_id: pollID },
           withCredentials: true,
         })
