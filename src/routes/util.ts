@@ -154,7 +154,7 @@ export function getParam<T extends QueryParamTypeName>(
  *
  * @param obj Response object.
  */
-export function respond<T>(res: Response, obj?: T): void {
+export function respond<T = undefined>(res: Response, obj?: T): void {
   res.json({
     res: obj,
   });

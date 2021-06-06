@@ -48,7 +48,7 @@ export async function sendEmail(
 
     const mailOptions = {
       from: {
-        name: "Luther Navigator",
+        name: "GreenPoll",
         address: emailAddress,
       },
       to: emailTo,

@@ -115,7 +115,7 @@ export class SessionService extends BaseService {
   }
 
   /**
-   * Deletes all sessions associated witht a user.
+   * Deletes all sessions associated with a user.
    *
    * @param userID The ID of the user.
    */

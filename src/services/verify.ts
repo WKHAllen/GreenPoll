@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { BaseService, ServiceError, pruneVerifyRecord } from "./util";
+import { BaseService, ServiceError } from "./util";
 import { User } from "./user";
 
 /**
@@ -23,13 +23,9 @@ export class VerifyService extends BaseService {
    * Creates a verification record and returns the resulting record.
    *
    * @param email The email address of the user being verified.
-   * @param prune Whether or not to prune the record when the time comes.
    * @returns The resulting verification record.
    */
-  public async createVerification(
-    email: string,
-    prune: boolean = true
-  ): Promise<Verify> {
+  public async createVerification(email: string): Promise<Verify> {
     const verificationExists = await this.verificationExistsForEmail(email);
 
     if (!verificationExists) {
@@ -37,10 +33,6 @@ export class VerifyService extends BaseService {
         "verify/create_verification.sql",
         [email]
       );
-
-      if (prune) {
-        pruneVerifyRecord(this.dbm, res[0].id);
-      }
 
       return res[0];
     } else {
@@ -198,5 +190,12 @@ export class VerifyService extends BaseService {
     } else {
       throw new ServiceError("Invalid verify ID");
     }
+  }
+
+  /**
+   * Prunes all old verification records.
+   */
+  public async pruneVerifications(): Promise<void> {
+    await this.dbm.executeFile("verify/prune_verifications.sql");
   }
 }

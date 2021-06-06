@@ -4,7 +4,11 @@
  */
 
 import DatabaseManager from "./services";
-import { pruneVerifyRecords, prunePasswordResetRecords } from "./services/util";
+
+/**
+ * How often to prune records.
+ */
+const PRUNE_INTERVAL: number = 60 * 1000;
 
 /**
  * Initialize the database.
@@ -27,7 +31,9 @@ export default async function initDB(
   dbm.db.executeFiles(tables.map((table) => `init/${table}.sql`));
 
   if (prune) {
-    await pruneVerifyRecords(dbm);
-    await prunePasswordResetRecords(dbm);
+    setInterval(async () => {
+      await dbm.verifyService.pruneVerifications();
+      await dbm.passwordResetService.prunePasswordResets();
+    }, PRUNE_INTERVAL);
   }
 }

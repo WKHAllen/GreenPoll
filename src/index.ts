@@ -46,6 +46,7 @@ app.use(express.static(path.join(__dirname + "/../../app/dist/greenpoll")));
 
 // Use routes
 app.use("/api", routes.userRouter);
+app.use("/api", routes.loginRegisterRouter);
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirname + "/../../app/dist/greenpoll/index.html"));
