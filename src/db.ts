@@ -11,7 +11,10 @@ import * as path from "path";
 const logErrors = true;
 
 // Parse timestamps
-types.setTypeParser(1114, (timestamp) => Date.parse(timestamp));
+types.setTypeParser(
+  types.TypeId.TIMESTAMP,
+  (timestamp) => new Date(timestamp + "+0000")
+);
 
 /**
  * If an error is thrown, provide information on the error.
