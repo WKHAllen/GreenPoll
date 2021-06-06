@@ -5,6 +5,7 @@
 
 import * as nodemailer from "nodemailer";
 import * as fs from "fs";
+import SMTPTransport = require("nodemailer/lib/smtp-transport");
 
 /**
  * Email address environment variable.
@@ -37,40 +38,35 @@ export async function sendEmail(
   text: string = "",
   tryNum: number = 1
 ): Promise<void> {
-  return new Promise((resolve) => {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      auth: {
-        user: emailAddress,
-        pass: emailPassword,
-      },
-    });
-
-    const mailOptions = {
-      from: {
-        name: "GreenPoll",
-        address: emailAddress,
-      },
-      to: emailTo,
-      subject: subject,
-      html: html,
-      text: text,
-    };
-
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.warn(
-          `Error sending email to '${emailTo}' (try ${tryNum}):\n`,
-          err
-        );
-        setTimeout(() => {
-          sendEmail(emailTo, subject, html, text, tryNum + 1).then(resolve);
-        }, emailTimeout);
-      } else {
-        resolve();
-      }
-    });
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    auth: {
+      user: emailAddress,
+      pass: emailPassword,
+    },
   });
+
+  const mailOptions = {
+    from: {
+      name: "GreenPoll",
+      address: emailAddress,
+    },
+    to: emailTo,
+    subject: subject,
+    html: html,
+    text: text,
+  };
+
+  let info: SMTPTransport.SentMessageInfo;
+
+  try {
+    info = await transporter.sendMail(mailOptions);
+  } catch (err) {
+    console.warn(`Error sending email to '${emailTo}' (try ${tryNum}):\n`, err);
+    setTimeout(() => {
+      sendEmail(emailTo, subject, html, text, tryNum + 1);
+    }, emailTimeout);
+  }
 }
 
 /**
@@ -93,10 +89,12 @@ export async function sendFormattedEmail(
   let text = textBuffer.toString();
 
   for (const key of Object.keys(options)) {
-    while (html.includes(`{${key}}`))
+    while (html.includes(`{${key}}`)) {
       html = html.replace(`{${key}}`, options[key]);
-    while (text.includes(`{${key}}`))
+    }
+    while (text.includes(`{${key}}`)) {
       text = text.replace(`{${key}}`, options[key]);
+    }
   }
 
   await sendEmail(emailTo, subject, html, text);
