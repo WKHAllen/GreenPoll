@@ -5,7 +5,7 @@ import {
   PollInfo,
   PollOptionInfo,
   PollVoteInfo,
-  PollUserVoteInfo,
+  PollVoterInfo,
 } from './poll.service';
 import { ProfileService } from '../profile/profile.service';
 import { LoginRegisterService } from '../login-register/login-register.service';
@@ -29,7 +29,7 @@ export class PollComponent implements OnInit {
   poll: PollInfo = {};
   pollOptions: PollOptionInfo[] = [];
   pollVotes: PollVoteInfo[] = [];
-  pollUserVotes: PollUserVoteInfo[] = [];
+  pollVoters: PollVoterInfo[] = [];
   selectedOption = 0;
   loggedIn = false;
   canEdit = false;
@@ -101,17 +101,14 @@ export class PollComponent implements OnInit {
       this.pollService.getPollInfo(this.pollID),
       this.pollService.getPollOptions(this.pollID),
       this.pollService.getPollVotes(this.pollID),
-      this.pollService.getPollUserVotes(this.pollID),
+      this.pollService.getPollVoters(this.pollID),
     ])
-      .then(([pollInfo, pollOptions, pollVotes, pollUserVotes]) => {
+      .then(([pollInfo, pollOptions, pollVotes, pollVoters]) => {
         this.pollInfo = true;
         this.poll = pollInfo;
         this.pollOptions = pollOptions;
         this.pollVotes = pollVotes;
-        this.pollUserVotes = pollUserVotes.map((userVote) => ({
-          ...userVote,
-          vote_time: (userVote.vote_time as number) * 1000,
-        }));
+        this.pollVoters = pollVoters;
         this.pieChartColors = [this.generateColors(pollOptions.length)];
 
         this.updateVoteInfo();

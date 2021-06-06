@@ -80,10 +80,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let vote of pollUserVotes">
-          <td>{{ vote.username }}</td>
-          <td>{{ vote.poll_option_value }}</td>
-          <td>{{ vote.vote_time | date: "medium" }}</td>
+        <tr *ngFor="let voter of pollVoters">
+          <td>{{ voter.username }}</td>
+          <td>{{ voter.poll_option_value }}</td>
+          <td>{{ voter.vote_time | date: "medium" }}</td>
         </tr>
       </tbody>
     </table>

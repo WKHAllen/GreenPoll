@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { APIURL, GenericResponse } from '../util';
+import { apiRequest } from '../util';
 
 export interface PollInfo {
   id?: number;
@@ -46,302 +46,115 @@ export class PollService {
     title: string,
     description: string
   ): Promise<PollInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollInfo>(APIURL + '/create_poll', {
-          params: { title, description },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
+    return await apiRequest<PollInfo>(this.http, '/create_poll', {
+      title,
+      description,
     });
   }
 
   public async getPollInfo(pollID: number): Promise<PollInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollInfo>(APIURL + '/get_poll_info', {
-          params: { poll_id: pollID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
+    return await apiRequest<PollInfo>(this.http, '/get_poll_info', {
+      poll_id: pollID,
     });
   }
 
   public async getPollOptions(pollID: number): Promise<PollOptionInfo[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollOptionInfo[]>(APIURL + '/get_poll_options', {
-          params: { poll_id: pollID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!('error' in res)) {
-            resolve(res);
-          } else {
-            reject(res['error']);
-          }
-        });
+    return await apiRequest<PollOptionInfo[]>(this.http, '/get_poll_options', {
+      poll_id: pollID,
     });
   }
 
   public async getPollVotes(pollID: number): Promise<PollVoteInfo[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollVoteInfo[]>(APIURL + '/get_poll_votes', {
-          params: { poll_id: pollID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!('error' in res)) {
-            resolve(res);
-          } else {
-            reject(res['error']);
-          }
-        });
+    return await apiRequest<PollVoteInfo[]>(this.http, '/get_poll_votes', {
+      poll_id: pollID,
     });
   }
 
   public async setPollTitle(pollID: number, title: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<GenericResponse>(APIURL + '/set_poll_title', {
-          params: { poll_id: pollID, title },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
-    });
+    await apiRequest(this.http, '/set_poll_title', { poll_id: pollID, title });
   }
 
   public async setPollDescription(
     pollID: number,
     description: string
   ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<GenericResponse>(APIURL + '/set_poll_description', {
-          params: { poll_id: pollID, description },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
+    await apiRequest(this.http, '/set_poll_description', {
+      poll_id: pollID,
+      description,
     });
   }
 
   public async deletePoll(pollID: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<GenericResponse>(APIURL + '/delete_poll', {
-          params: { poll_id: pollID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
-    });
+    await apiRequest(this.http, '/delete_poll', { poll_id: pollID });
   }
 
   public async createPollOption(
     pollID: number,
     value: string
   ): Promise<PollOptionInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollOptionInfo>(APIURL + '/create_poll_option', {
-          params: { poll_id: pollID, value },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
+    return await apiRequest<PollOptionInfo>(this.http, '/create_poll_option', {
+      poll_id: pollID,
+      value,
     });
   }
 
   public async getPollOptionInfo(
     pollOptionID: number
   ): Promise<PollOptionInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollOptionInfo>(APIURL + '/get_poll_option_info', {
-          params: { poll_option_id: pollOptionID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
-    });
+    return await apiRequest<PollOptionInfo>(
+      this.http,
+      '/get_poll_option_info',
+      { poll_option_id: pollOptionID }
+    );
   }
 
   public async setPollOptionValue(
     pollOptionID: number,
     value: string
   ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<GenericResponse>(APIURL + '/set_poll_option_value', {
-          params: { poll_option_id: pollOptionID, new_value: value },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
+    await apiRequest(this.http, '/set_poll_option_value', {
+      poll_option_id: pollOptionID,
+      new_value: value,
     });
   }
 
   public async getPollOptionPoll(pollOptionID: number): Promise<PollInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollInfo>(APIURL + '/get_poll_option_poll', {
-          params: { poll_option_id: pollOptionID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
+    return await apiRequest<PollInfo>(this.http, '/get_poll_option_poll', {
+      poll_option_id: pollOptionID,
     });
   }
 
   public async deletePollOption(pollOptionID: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<GenericResponse>(APIURL + '/delete_poll_option', {
-          params: { poll_option_id: pollOptionID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
+    await apiRequest(this.http, '/delete_poll_option', {
+      poll_option_id: pollOptionID,
     });
   }
 
   public async pollVote(pollOptionID: number): Promise<PollVoteInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollVoteInfo>(APIURL + '/poll_vote', {
-          params: { poll_option_id: pollOptionID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
+    return await apiRequest<PollVoteInfo>(this.http, '/poll_vote', {
+      poll_option_id: pollOptionID,
     });
   }
 
   public async pollUnvote(pollID: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollVoteInfo>(APIURL + '/poll_unvote', {
-          params: { poll_id: pollID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
-    });
+    await apiRequest(this.http, '/poll_unvote', { poll_id: pollID });
   }
 
   public async getPollVotePoll(pollVoteID: number): Promise<PollInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollInfo>(APIURL + '/get_poll_vote_poll', {
-          params: { poll_vote_id: pollVoteID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
+    return await apiRequest<PollInfo>(this.http, '/get_poll_vote_poll', {
+      poll_vote_id: pollVoteID,
     });
   }
 
   public async getUserVote(pollID: number): Promise<PollVoteInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollVoteInfo>(APIURL + '/get_user_vote', {
-          params: { poll_id: pollID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
+    return await apiRequest<PollVoteInfo>(this.http, '/get_user_vote', {
+      poll_id: pollID,
     });
   }
 
   public async getPollVoters(pollID: number): Promise<PollVoterInfo[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollVoterInfo[]>(APIURL + '/get_poll_voters', {
-          params: { poll_id: pollID },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!('error' in res)) {
-            resolve(res);
-          } else {
-            reject(res['error']);
-          }
-        });
+    return await apiRequest<PollVoterInfo[]>(this.http, '/get_poll_voters', {
+      poll_id: pollID,
     });
   }
 }

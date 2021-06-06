@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PollInfo } from '../poll/poll.service';
-import { APIURL, GenericResponse } from '../util';
+import { apiRequest } from '../util';
 
 export interface UserInfo {
   id?: number;
@@ -18,68 +18,18 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   public async getUserInfo(): Promise<UserInfo> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<UserInfo>(APIURL + '/get_user_info', {
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!res.error) {
-            resolve(res);
-          } else {
-            reject(res.error);
-          }
-        });
-    });
+    return await apiRequest<UserInfo>(this.http, '/get_user_info');
   }
 
   public async setUsername(newUsername: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<GenericResponse>(APIURL + '/set_username', {
-          params: { new_username: newUsername },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (res.success) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
-    });
+    await apiRequest(this.http, '/set_username', { new_username: newUsername });
   }
 
   public async setPassword(newPassword: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<GenericResponse>(APIURL + '/set_password', {
-          params: { new_password: newPassword },
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (res.success) {
-            resolve();
-          } else {
-            reject(res.error);
-          }
-        });
-    });
+    await apiRequest(this.http, '/set_password', { new_password: newPassword });
   }
 
   public async getUserPolls(): Promise<PollInfo[]> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .get<PollInfo[]>(APIURL + '/get_user_polls', {
-          withCredentials: true,
-        })
-        .subscribe((res) => {
-          if (!('error' in res)) {
-            resolve(res);
-          } else {
-            reject(res['error']);
-          }
-        });
-    });
+    return await apiRequest<PollInfo[]>(this.http, '/get_user_polls');
   }
 }
