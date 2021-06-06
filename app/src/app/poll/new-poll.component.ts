@@ -57,7 +57,7 @@ export class NewPollComponent implements OnInit {
       this.pollService
         .createPoll(form.title, form.description)
         .then((poll) => {
-          const pollID = poll.id as number;
+          const pollID = poll.id;
           Promise.all(
             options.map((option) =>
               this.pollService.createPollOption(pollID, option)

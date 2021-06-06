@@ -3,37 +3,33 @@ import { HttpClient } from '@angular/common/http';
 import { apiRequest } from '../util';
 
 export interface PollInfo {
-  id?: number;
-  user_id?: number;
-  title?: string;
-  description?: string;
-  create_time?: number;
-  error?: string;
+  id: number;
+  user_id: number;
+  title: string;
+  description: string;
+  create_time: number;
 }
 
 export interface PollOptionInfo {
-  id?: number;
-  poll_id?: number;
-  value?: string;
-  error?: string;
+  id: number;
+  poll_id: number;
+  value: string;
 }
 
 export interface PollVoteInfo {
-  id?: number;
-  user_id?: number;
-  poll_id?: number;
-  poll_option_id?: number;
-  vote_time?: number;
-  error?: string;
+  id: number;
+  user_id: number;
+  poll_id: number;
+  poll_option_id: number;
+  vote_time: number;
 }
 
 export interface PollVoterInfo {
-  user_id?: number;
-  username?: string;
-  poll_option_id?: number;
-  poll_option_value?: string;
-  vote_time?: number;
-  error?: string;
+  user_id: number;
+  username: string;
+  poll_option_id: number;
+  poll_option_value: string;
+  vote_time: number;
 }
 
 @Injectable({

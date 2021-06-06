@@ -3,10 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { apiRequest } from '../util';
 
 export interface SpecificUserInfo {
-  id?: number;
-  username?: string;
-  join_time?: number;
-  error?: string;
+  id: number;
+  username: string;
+  join_time: number;
 }
 
 @Injectable({

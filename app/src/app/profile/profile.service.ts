@@ -4,11 +4,10 @@ import { PollInfo } from '../poll/poll.service';
 import { apiRequest } from '../util';
 
 export interface UserInfo {
-  id?: number;
-  username?: string;
-  email?: string;
-  join_time?: number;
-  error?: string;
+  id: number;
+  username: string;
+  email: string;
+  join_time: number;
 }
 
 @Injectable({

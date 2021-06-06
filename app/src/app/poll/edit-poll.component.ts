@@ -33,7 +33,13 @@ export class EditPollComponent implements OnInit {
   optionNums = Array.from({ length: this.maxOptions }, (_, i) => i + 1);
   pollID = 0;
   pollInfo = false;
-  poll: PollInfo = {};
+  poll: PollInfo = {
+    id: 0,
+    user_id: 0,
+    title: '',
+    description: '',
+    create_time: 0,
+  };
   pollOptions: PollOptionInfo[] = [];
   loggedIn = false;
   canEdit = false;
@@ -120,11 +126,11 @@ export class EditPollComponent implements OnInit {
           for (let i = 0; i < this.maxOptions; i++) {
             if (i < this.pollOptions.length && options[i].length > 0) {
               editOptions.push({
-                id: this.pollOptions[i].id as number,
+                id: this.pollOptions[i].id,
                 value: options[i],
               });
             } else if (i < this.pollOptions.length && options[i].length === 0) {
-              deleteOptions.push({ id: this.pollOptions[i].id as number });
+              deleteOptions.push({ id: this.pollOptions[i].id });
             } else if (i >= this.pollOptions.length && options[i].length > 0) {
               newOptions.push({ value: options[i] });
             }

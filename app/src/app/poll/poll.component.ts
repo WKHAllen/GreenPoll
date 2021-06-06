@@ -26,7 +26,13 @@ import {
 export class PollComponent implements OnInit {
   pollID = 0;
   pollInfo = false;
-  poll: PollInfo = {};
+  poll: PollInfo = {
+    id: 0,
+    user_id: 0,
+    title: '',
+    description: '',
+    create_time: 0,
+  };
   pollOptions: PollOptionInfo[] = [];
   pollVotes: PollVoteInfo[] = [];
   pollVoters: PollVoterInfo[] = [];
@@ -116,10 +122,7 @@ export class PollComponent implements OnInit {
         if (this.loggedIn) {
           this.pollService
             .getUserVote(this.pollID)
-            .then(
-              (userVote) =>
-                (this.selectedOption = userVote.poll_option_id as number)
-            )
+            .then((userVote) => (this.selectedOption = userVote.poll_option_id))
             .catch((err) => {
               if (err === 'Poll vote does not exist') {
                 this.selectedOption = 0;
@@ -138,9 +141,7 @@ export class PollComponent implements OnInit {
   }
 
   updateVoteInfo() {
-    this.pieChartLabels = this.pollOptions.map(
-      (option) => option.value as string
-    );
+    this.pieChartLabels = this.pollOptions.map((option) => option.value);
     this.pieChartData = this.pollOptions.map(
       (option) =>
         this.pollVotes.filter((vote) => vote.poll_option_id === option.id)

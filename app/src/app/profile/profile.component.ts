@@ -19,7 +19,7 @@ interface SetPasswordForm {
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  userInfo: UserInfo = {};
+  userInfo: UserInfo = { id: 0, username: '', email: '', join_time: 0 };
   newUsername: string = '';
   userPolls: PollInfo[] = [];
   gotUserInfo = false;
@@ -49,17 +49,13 @@ export class ProfileComponent implements OnInit {
         .getUserInfo()
         .then((userInfo) => {
           this.userInfo = userInfo;
-          this.userInfo.join_time = (userInfo.join_time as number) * 1000;
-          this.newUsername = userInfo.username as string;
+          this.newUsername = userInfo.username;
           this.gotUserInfo = true;
 
           this.profileService
             .getUserPolls()
             .then((userPolls) => {
-              this.userPolls = userPolls.map((poll) => ({
-                ...poll,
-                create_time: (poll.create_time as number) * 1000,
-              }));
+              this.userPolls = userPolls;
               this.gotUserPolls = true;
             })
             .catch((err) => (this.userPollsError = err));
