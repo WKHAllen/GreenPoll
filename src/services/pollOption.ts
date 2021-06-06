@@ -96,7 +96,12 @@ export class PollOptionService extends BaseService {
       "poll_option/get_poll_option_poll.sql",
       [pollOptionID]
     );
-    return res[0];
+
+    if (res.length === 1) {
+      return res[0];
+    } else {
+      throw new ServiceError("Poll option does not exist");
+    }
   }
 
   /**
