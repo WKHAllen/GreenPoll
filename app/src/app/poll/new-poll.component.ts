@@ -58,12 +58,8 @@ export class NewPollComponent implements OnInit {
         .createPoll(form.title, form.description)
         .then((poll) => {
           const pollID = poll.id;
-          Promise.all(
-            options.map((option) =>
-              this.pollService.createPollOption(pollID, option)
-            )
-          )
-            .then((_) => {
+          this.createPollOptions(pollID, options)
+            .then(() => {
               this.router.navigate(['poll', pollID]);
             })
             .catch((err) => {
@@ -75,6 +71,15 @@ export class NewPollComponent implements OnInit {
           this.submittingForm = false;
           this.errors.push(err);
         });
+    }
+  }
+
+  private async createPollOptions(
+    pollID: number,
+    options: string[]
+  ): Promise<void> {
+    for (const option of options) {
+      await this.pollService.createPollOption(pollID, option);
     }
   }
 }
