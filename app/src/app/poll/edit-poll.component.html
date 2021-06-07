@@ -75,7 +75,15 @@
           class="btn button-primary mt-1 mb-2"
           [disabled]="submittingForm"
         >
-          Edit Poll
+          Edit poll
+        </button>
+        <button
+          type="button"
+          class="btn button-secondary mt-1 mb-2 ms-2"
+          (click)="deletePoll()"
+          [disabled]="deletingPoll"
+        >
+          Delete poll
         </button>
         <div class="mb-2">
           <div *ngFor="let error of errors">

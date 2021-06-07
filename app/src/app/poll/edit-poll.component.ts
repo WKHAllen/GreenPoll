@@ -45,6 +45,7 @@ export class EditPollComponent implements OnInit {
   canEdit = false;
   determinedEditStatus = false;
   submittingForm = false;
+  deletingPoll = false;
   errors: string[] = [];
   initError = '';
 
@@ -166,5 +167,14 @@ export class EditPollComponent implements OnInit {
         })
         .catch((err) => this.errors.push(err));
     }
+  }
+
+  deletePoll() {
+    this.deletingPoll = true;
+
+    this.pollService
+      .deletePoll(this.pollID)
+      .then(() => this.router.navigate(['/']))
+      .catch((err) => this.errors.push(err));
   }
 }
