@@ -1,7 +1,12 @@
 <h1 class="login-header">Login</h1>
 <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value)">
   <div class="form-group">
-    <label for="email" class="form-label">Email</label>
+    <label
+      for="email"
+      class="form-label"
+      [ngClass]="{ 'attention-to-email': drawAttentionToEmail }"
+      >Email</label
+    >
     <input
       type="email"
       class="form-control"

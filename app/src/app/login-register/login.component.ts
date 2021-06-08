@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   submittingForm = false;
   error = '';
   after = '';
+  drawAttentionToEmail = false;
 
   constructor(
     private loginRegisterService: LoginRegisterService,
@@ -39,6 +40,10 @@ export class LoginComponent implements OnInit {
       .catch((err) => {
         this.submittingForm = false;
         this.error = err;
+
+        this.drawAttentionToEmail =
+          this.error === 'Invalid login' &&
+          (!form.email.includes('@') || !form.email.includes('.'));
       });
   }
 }
