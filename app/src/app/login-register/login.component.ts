@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   error = '';
   after = '';
   drawAttentionToEmail = false;
+  emailFontSize = 1;
 
   constructor(
     private loginRegisterService: LoginRegisterService,
@@ -41,9 +42,18 @@ export class LoginComponent implements OnInit {
         this.submittingForm = false;
         this.error = err;
 
-        this.drawAttentionToEmail =
+        if (
           this.error === 'Invalid login' &&
-          (!form.email.includes('@') || !form.email.includes('.'));
+          form.email.length > 0 &&
+          form.password.length > 0 &&
+          (!form.email.includes('@') || !form.email.includes('.'))
+        ) {
+          this.drawAttentionToEmail = true;
+          this.emailFontSize *= 1.25;
+        } else {
+          this.drawAttentionToEmail = false;
+          this.emailFontSize = 1;
+        }
       });
   }
 }

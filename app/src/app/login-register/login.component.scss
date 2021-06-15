@@ -2,6 +2,5 @@
 
 .attention-to-email {
   @include styles.rotate-color-wheel(3s);
-  font-size: 2em;
   font-weight: bold;
 }
