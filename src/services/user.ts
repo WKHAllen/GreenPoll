@@ -267,4 +267,11 @@ export class UserService extends BaseService {
   public async deleteUser(userID: number): Promise<void> {
     await this.dbm.executeFile("user/delete_user.sql", [userID]);
   }
+
+  /**
+   * Prunes all old unverified accounts.
+   */
+  public async pruneUnverifiedUsers(): Promise<void> {
+    await this.dbm.executeFile("user/prune_unverified_users.sql");
+  }
 }
