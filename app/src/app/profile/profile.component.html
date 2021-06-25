@@ -117,8 +117,8 @@
     </small>
   </div>
 </div>
-<div>
-  <h3>Your Polls</h3>
+<div class="profile-form-group">
+  <h3>Your polls</h3>
   <p *ngIf="!gotUserPolls" class="fetching-user-polls">
     Fetching your polls...
   </p>
@@ -148,4 +148,41 @@
     </div>
   </div>
   <a routerLink="/new" class="btn button-primary mt-1">New poll</a>
+</div>
+<div class="profile-form-group">
+  <h3>Polls you have voted on</h3>
+  <p *ngIf="!gotUserVotePolls" class="fetching-user-vote-polls">
+    Fetching polls you have voted on...
+  </p>
+  <div *ngIf="gotUserVotePolls">
+    <small *ngIf="userVotePollsError" class="error-text">
+      {{ userVotePollsError }}
+    </small>
+    <p
+      *ngIf="!userVotePollsError && userVotePolls.length === 0"
+      class="no-polls-info"
+    >
+      You have not yet voted on any polls.
+    </p>
+    <div
+      *ngIf="!userVotePollsError && userVotePolls.length > 0"
+      class="row mt-1 mb-2"
+    >
+      <div *ngFor="let poll of userVotePolls" class="col-12 col-sm-4">
+        <div class="poll-card-container">
+          <a routerLink="/poll/{{ poll.id }}">
+            <div class="card poll-card">
+              <div class="card-body">
+                <h5 class="card-title">{{ poll.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  {{ poll.create_time | date }}
+                </h6>
+                <p class="card-text">{{ poll.description }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -22,10 +22,13 @@ export class ProfileComponent implements OnInit {
   userInfo: UserInfo = { id: 0, username: '', email: '', join_time: 0 };
   newUsername: string = '';
   userPolls: PollInfo[] = [];
+  userVotePolls: PollInfo[] = [];
   gotUserInfo = false;
   gotUserPolls = false;
+  gotUserVotePolls = false;
   userInfoError = '';
   userPollsError = '';
+  userVotePollsError = '';
   submittingUsernameForm = false;
   submittingPasswordForm = false;
   logoutEverywhereClicked = false;
@@ -59,6 +62,14 @@ export class ProfileComponent implements OnInit {
               this.gotUserPolls = true;
             })
             .catch((err) => (this.userPollsError = err));
+
+          this.profileService
+            .getUserVotePolls()
+            .then((userVotePolls) => {
+              this.userVotePolls = userVotePolls;
+              this.gotUserVotePolls = true;
+            })
+            .catch((err) => (this.userVotePollsError = err));
         })
         .catch((err) => (this.userInfoError = err));
     }

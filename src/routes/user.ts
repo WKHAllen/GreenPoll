@@ -90,3 +90,23 @@ userRouter.get(
     respond(res, polls);
   })
 );
+
+// Gets the polls a user has voted on
+userRouter.get(
+  "/get_user_vote_polls",
+  wrapRoute(async (req, res) => {
+    const dbm = getDBM(req);
+    const user = await getLoggedInUser(req);
+
+    const userVotePolls = await dbm.userService.getUserVotePolls(user.id);
+    const votePolls = userVotePolls.map((poll) => ({
+      id: poll.id,
+      user_id: poll.user_id,
+      title: poll.title,
+      description: poll.description,
+      create_time: poll.create_time,
+    }));
+
+    respond(res, votePolls);
+  })
+);

@@ -234,6 +234,20 @@ export class UserService extends BaseService {
   }
 
   /**
+   * Returns all polls the user has voted on.
+   *
+   * @param userID The ID of the user.
+   * @returns The polls the user has voted on.
+   */
+  public async getUserVotePolls(userID: number): Promise<Poll[]> {
+    const polls = await this.dbm.executeFile<Poll>(
+      "user/get_user_vote_polls.sql",
+      [userID]
+    );
+    return polls;
+  }
+
+  /**
    * Logs a user in and returns the new session.
    *
    * @param email The user's email address.

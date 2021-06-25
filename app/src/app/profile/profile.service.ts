@@ -31,4 +31,8 @@ export class ProfileService {
   public async getUserPolls(): Promise<PollInfo[]> {
     return await apiRequest<PollInfo[]>(this.http, '/get_user_polls');
   }
+
+  public async getUserVotePolls(): Promise<PollInfo[]> {
+    return await apiRequest<PollInfo[]>(this.http, '/get_user_vote_polls');
+  }
 }
