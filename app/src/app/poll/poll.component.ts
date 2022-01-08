@@ -51,6 +51,9 @@ export class PollComponent implements OnInit {
   pieChartLegend = true;
   pieChartPlugins = [];
   pieChartColors: Color[] = [];
+  phiRatio = 137.508;
+  colorSeed = 0;
+  colorOffset = 0;
 
   constructor(
     private pollService: PollService,
@@ -73,6 +76,8 @@ export class PollComponent implements OnInit {
         this.error = 'Missing value for pollID';
       } else {
         this.pollID = pollID;
+        this.colorSeed = this.pollID * 5;
+        this.colorOffset = this.randomWithSeed();
 
         this.updateInfo();
         setInterval(() => this.updateInfo(), this.refreshInterval * 1000);
@@ -149,10 +154,18 @@ export class PollComponent implements OnInit {
     );
   }
 
+  private randomWithSeed(): number {
+    const x = Math.sin(this.colorSeed++) * 1000;
+    return x - Math.floor(x);
+  }
+
   private generateColors(numColors: number): Color {
     return {
       backgroundColor: Array.from(Array(numColors).keys()).map(
-        (value) => `hsl(${Math.round(value * 137.508) % 360}, 100%, 50%)`
+        (value) =>
+          `hsl(${
+            Math.round(this.colorOffset * 360 + value * this.phiRatio) % 360
+          }, 100%, 50%)`
       ),
     };
   }
